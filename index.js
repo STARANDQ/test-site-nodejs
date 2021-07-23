@@ -1,16 +1,16 @@
-const chalk = require('chalk');
-const http = require("http");
+const express = require('express');
+const bodyParser = require('body-parser');
+const urlShortener = require('node-url-shortener');
 
-const host = 'localhost';
-const port = 8880;
+const app = express();
+const path = require('path');
+const port = process.env.PORT || 3100;
 
-const requestListener = function (req, res) {
-    res.setHeader("Content-Type", "text/html");
-    res.writeHead(200);
-    res.end(`<html><body><h1>Test Pages In NodeJS</h1></body></html>`);
-};
 
-const server = http.createServer(requestListener);
-server.listen(port, host, () => {
-    console.log(`Server is running on http://${host}:${port}`);
+app.get('/', function(req, res) {
+    res.sendFile(path.join(__dirname + '/index.html'));
 });
+
+app.use(express.urlencoded());
+
+app.listen(port, () => console.log(`url-shortener listening on port ${port}!`));
