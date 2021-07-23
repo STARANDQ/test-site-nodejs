@@ -1,4 +1,6 @@
 const chalk = require('chalk');
+const myTeleBot = require('./telegramBot/telegramBot');
 
-console.log(chalk.blue("Test Commit and HEROKU"));
-console.log(chalk.red("Test install chalk"));
+let bot = new myTeleBot.TelegramBot("TEST SITE");
+
+bot.startBot().then();
