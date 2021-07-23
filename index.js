@@ -1,16 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const urlShortener = require('node-url-shortener');
-
-const app = express();
-const path = require('path');
-const port = process.env.PORT || 3100;
+let express = require("express");
+let app = express();
 
 
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+
+app.get('/', function(request, response) {
+    response.send('Hello World!');
 });
 
-app.use(express.urlencoded());
-
-app.listen(port, () => console.log(`url-shortener listening on port ${port}!`));
+let port = process.env.PORT || 5000;
+app.listen(port, function() {
+    console.log("Listening on " + port);
+});
