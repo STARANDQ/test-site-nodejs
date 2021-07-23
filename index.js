@@ -6,7 +6,11 @@ let app = express();
 
 
 app.get('/', function(request, response) {
-    response.send(fs.readFileSync("index.html", "utf8"));
+    response.send(fs.readFileSync("resource/pages/index.html", "utf8"));
+});
+
+app.get('/next.html', function(request, response) {
+    response.send(fs.readFileSync("resource/pages/next.html", "utf8"));
 });
 
 let port = process.env.PORT || 5000;
