@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Login Register App</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./css/main.css">
+
+	<script type="text/javascript">
+		function info(id){
+			$.ajax({
+				type: 'POST',
+				url: '/fileInfo',
+				data: {"id":id},
+				dataType: "json",
+				success: (response) => {
+                    if (response.Success === "getInfo") {
+                        document.getElementById("infoFile").innerHTML = response.Info;
+                    }
+                },
+				error: () => {
+				}
+			})
+		}
+	</script>
+</head>
+
+<body>
+<div class="col-md-4 col-md-offset-4 form-card">
+	<div>
+		<p>Files</p>
+	</div>
+	<div>
+		<center>
+			<div id="infoFile">
+
+			</div>
+
+				<% data.forEach(elem => {  %>
+					<p onclick="info(<%= elem.unique_id %>)"><%= elem.fileName %></p>
+				<% } ) %>
+
+			<form action="/upload" method="post" enctype="multipart/form-data">
+				<input type="file" name="uploadFile" />
+				<input type="submit">
+			</form>
+		</center>
+	</div>
+	<div class="abc">
+		<a href="/profile">Назад</a>
+	</div>
+	<br><br>
+</div>
+</body>
+
+</html>

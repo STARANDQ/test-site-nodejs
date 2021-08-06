@@ -1,0 +1,61 @@
+body{
+	text-align: center !important;
+}
+p{
+	margin-top: 20px;
+	font-size: 30px;
+}
+input{
+	text-align: center;
+}
+#LangTable{
+    margin-bottom: 15px;
+}
+.form-card{
+    background-color: #fff8eb;
+    border-radius: 10px;
+    margin-top: 130px;
+}
+.mssg{
+	margin-top: 5px;
+	margin-bottom: 5px;
+	border-radius: 5px;
+}
+
+.chapter{
+	background: #e1dacc;
+	padding: 10px;
+	margin: 5px 0 5px 0;
+	border: 3px solid #bab4a8;
+}
+
+.block{
+	margin: 5px 0 5px 0;
+	padding: 10px;
+	border: 3px solid #766f62;
+	background: #aaa292;
+}
+
+.NameScript{
+	background: #cfc2ab;
+	margin: 10px;
+}
+
+.NameScript div.elem{
+	background: #ecc88a;
+	margin: 10px;
+	padding: 20px;
+}
+
+.NameScript .info{
+	background: #ffd991;
+	padding: 10px;
+	border: 2px solid black;
+}
+
+.NameScript .keyWords{
+	background: #fae1b2;
+	display: inline-block;
+	padding: 10px;
+	border: 1px solid black;
+}

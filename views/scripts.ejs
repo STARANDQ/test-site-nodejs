@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Login Register App</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./css/main.css">
+
+	<script type="text/javascript">
+		function addScript(result, name){
+			$.ajax({
+				type: 'POST',
+				url: '/addScript',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					"result": JSON.stringify(result),
+					"name": name
+				}),
+				success: (response) => {
+                    if (response.Success === "reload") {
+                        window.location.reload();
+                    }
+                },
+				error: () => {
+				}
+			})
+		}
+
+		function setStatus(status, id){
+			$.ajax({
+				type: 'POST',
+				url: '/editScriptStatus',
+				data: {"status": status, "id":id},
+				dataType: "json",
+				success: (response) => {
+					if (response.Success === "reload") {
+						window.location.reload();
+					}
+				},
+				error: () => {
+				}
+			})
+		}
+	</script>
+</head>
+
+<body>
+<div class="col-md-4 col-md-offset-4 form-card">
+	<div>
+		<p>Profile Detail</p>
+	</div>
+	<div>
+		<center>
+			<table class="table table-hover text-center">
+
+			</table>
+
+		</center>
+	</div>
+	<form id = "formScript">
+		<input placeholder="Название скрипта" id = "nameScript"><br><br>
+		<div class="chapter">
+			<input placeholder="Раздел" class="chapterInput"><br><br>
+			<div class= "blocks">
+				<div class="block">
+					<input placeholder="Блок" data-type="blockName"><br><br>
+					<textarea placeholder="Ключевые слова" data-type="keyWords"></textarea><br><br>
+					<input placeholder="Вес блока" data-type="blockWeight">
+					<br><br>
+					<input type="radio" name="mode_0" value="simple">
+					Простой блок
+					<br>
+					<input type="radio" name="mode_0" value="complex">
+					Сложный блок
+				</div>
+				<div onclick="addBlock(this)">Добавить блок</div>
+			</div>
+		</div>
+		<div onclick="addChapter(this)">Добавить раздел</div>
+
+
+	</form>
+	<div class="abc">
+		<a onclick="generateResult()">Добавить скрипт</a>
+	</div>
+
+	<div class="abc">
+		<a href="/profile">Назад</a>
+	</div>
+	<hr>
+	<br><br>
+	<div id = "listScript">
+		<div class="NameScript">
+			<% data.forEach(elem => { %>
+				<p><%= elem.name %> [Архив]</p>
+				<% if(elem.status === "Действителен"){ %>
+					<p onclick="setStatus('Архивирован', '<%= elem.unique_id %>')"
+					   style="color: red">Архивировать</p>
+				<% } %>
+				<% if(elem.status === "Архивирован"){ %>
+					<p onclick="setStatus('Действителен', '<%= elem.unique_id %>')"
+					   style="color: greenyellow">Запустить</p>
+				<% } %>
+
+				<div class="elem">
+					<% JSON.parse(elem.script).forEach(elemNew => { %>
+						<p><%= elemNew.name %></p>
+						<% elemNew.blockArr.forEach(elemNewNew => { %>
+							<br>
+							<div class="info">
+								<span><b>Имя блока:</b> <%= elemNewNew.blockName %></span><br>
+								<br>
+								<div class="keyWords"><b>Ключевые слова</b><br><br>
+									<% elemNewNew.keyWords.split("\n").forEach(word => { %>
+										<%= word %><br>
+									<% }) %>
+								</div><br><br>
+								<span><b>Вес блока:</b> <%= elemNewNew.blockWeight %></span><br>
+								<span><b>Тип блока:</b> <%= elemNewNew.blockMode %></span><br>
+							</div>
+						<%})%>
+					<% }) %>
+				</div>
+			<% }) %>
+		</div>
+	</div>
+
+</div>
+<script>
+	let arrBlocks = [];
+	let arrChapter = [];
+	let nameScript = "";
+	let blockName = "";
+	let keyWords = "";
+	let blockWeight = "";
+	let blockMode = "";
+	let count = 1;
+	let form = document.getElementById("formScript");
+
+	function generateResult(){
+		name = form.querySelector("#nameScript").value;
+
+		form.querySelectorAll(".chapter").forEach(elem =>{
+
+			elem.querySelectorAll(".block").forEach(elemNew =>{
+
+				elemNew.querySelectorAll("input, textarea").forEach(res => {
+
+					switch (res.getAttribute("data-type")){
+						case "blockName":
+							blockName = res.value;
+							break;
+						case "keyWords":
+							keyWords = res.value;
+							break;
+						case "blockWeight":
+							blockWeight = res.value;
+							break;
+					}
+
+					if(res.type === "radio" && res.checked)
+						blockMode = res.value;
+
+				})
+
+				arrBlocks.push({
+					blockName: blockName,
+					keyWords: keyWords,
+					blockWeight: blockWeight,
+					blockMode: blockMode
+				});
+
+			})
+
+			arrChapter.push({
+				name:elem.querySelector('.chapterInput').value,
+				blockArr: arrBlocks
+			});
+
+			arrBlocks = [];
+		});
+
+		addScript(arrChapter, name);
+	}
+
+	//let blocks = document.getElementById("blocks");
+	let chapter = document.getElementById("chapter");
+	let arrBlock = [];
+	function addBlock(elem){
+		elem.removeAttribute("onclick");
+		elem.innerHTML = `
+			<div class="block">
+					<input placeholder="Блок" data-type="blockName"><br><br>
+					<textarea placeholder="Ключевые слова" data-type="keyWords"></textarea><br><br>
+					<input placeholder="Вес блока" data-type="blockWeight">
+					<br><br>
+					<input type="radio" name="mode_${count}" value="simple">
+					Простой блок
+					<br>
+					<input type="radio" name="mode_${count}" value="complex">
+					Сложный блок
+				</div>
+			<div onclick="addBlock(this)">Добавить блок</div>
+		`;
+		count++;
+	}
+
+	function addChapter(elem){
+		elem.removeAttribute("onclick");
+		elem.innerHTML = `
+			<div class="chapter">
+				<input placeholder="Раздел" class="chapterInput"><br><br>
+					<div class= "blocks">
+						<div class="block">
+							<input placeholder="Блок" data-type="blockName"><br><br>
+							<textarea placeholder="Ключевые слова" data-type="keyWords"></textarea><br><br>
+							<input placeholder="Вес блока" data-type="blockWeight">
+							<br><br>
+							<input type="radio" name="mode_${count}" value="simple">
+							Простой блок
+							<br>
+							<input type="radio" name="mode_${count}" value="complex">
+							Сложный блок
+						</div>
+						<div onclick="addBlock(this)">Добавить блок</div>
+					</div>
+			</div>
+			<div onclick="addChapter(this)">Добавить раздел</div>
+		`;
+		count++
+	}
+	function removeBlock(number){
+		document.querySelectorAll(".block").forEach(elem => arrBlock.push(elem));
+		arrBlock.forEach(elem => {
+			if(elem.getAttribute("data-id-block") == number)
+				elem.remove();
+		})
+		arrBlock = [];
+	}
+</script>
+
+</body>
+</html>

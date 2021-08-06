@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Login Register App</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+	<div class="col-md-4 col-md-offset-4 form-card">
+		<div>
+			<p>Profile Detail</p>
+		</div>
+		<div>
+			<center>
+				<table class="table table-hover text-center">
+					<tr>
+						<td>Name </td>
+						<td>
+							<%= name %>
+						</td>
+					</tr>
+					<tr>
+						<td>Surname</td>
+						<td><%= surname %></td>
+					</tr>
+					<tr>
+						<td>Patronymic</td>
+						<td><%= patronymic %></td>
+					</tr>
+					<tr>
+						<td>Роль</td>
+						<td>
+							<%=  %>
+							<% if (role === "admin") { %>
+								<span style="color:red">Администратор</span>
+							<% } else if(role === "supervisor") { %>
+								<span style="color:blue">Руководитель</span>
+							<% } else if(role === "employee") { %>
+								<span style="color:grey">Сотрудник</span>
+							<% } else { %>
+								role
+							<% } %>
+						</td>
+					</tr>
+				</table>
+			</center>
+		</div>
+		<div class="abc" id="LangTable">
+			<a href="/logout">Logout</a>
+		</div>
+		<br><br>
+		<% if(role === "admin") {%>
+			<div class="abc">
+				<a href="/register">Регистрация</a>
+			</div>
+			<div class="abc">
+				<a href="/userInfo">Профили</a>
+			</div>
+			<div class="abc">
+				<a href="/scripts">Скрипты</a>
+			</div>
+			<div class="abc">
+				<a href="/files">Файлы</a>
+			</div>
+			<div class="abc">
+				<a href="/scriptStatus">Статус Скрипта</a>
+			</div>
+			<div class="abc">
+				<a href="/result">Результат</a>
+			</div>
+		<%}%>
+	</div>
+</body>
+
+</html>

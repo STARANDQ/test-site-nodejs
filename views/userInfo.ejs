@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Login Register App</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js">
+	</script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="./css/main.css">
+
+	<script type="text/javascript">
+		function remove(id){
+			$.ajax({
+				type: 'POST',
+				url: '/userInfo',
+				data: {"id":id, "status": "remove"},
+				dataType: "json",
+				success: (response) => {
+                    if (response.Success === "reload") {
+                        window.location.reload();
+                    }
+                },
+				error: () => {
+				}
+			})
+		}
+
+		function edit(id){
+			$.ajax({
+				type: 'POST',
+				url: '/userInfo',
+				data: {"id":id, "status": "edit"},
+				dataType: "json",
+				success: (response) => {
+					if (response.Success === "reload") {
+						window.location.reload();
+					}
+				},
+				error: () => {
+				}
+			})
+		}
+	</script>
+</head>
+
+<body>
+<div class="col-md-4 col-md-offset-4 form-card">
+	<div>
+		<p>Profile Detail</p>
+	</div>
+	<div>
+		<center>
+			<table class="table table-hover text-center">
+
+				<tr>
+					<td>Фамилия</td>
+					<td>Имя</td>
+					<td>Отчество</td>
+					<td>Роль</td>
+					<td>Действия</td>
+				</tr>
+				<% data.forEach(elem => {  %>
+					<tr>
+						<td><%= elem.surname %></td>
+						<td><%= elem.name %></td>
+						<td><%= elem.patronymic %></td>
+						<td>
+						<% if (elem.role === "admin") { %>
+							<span style="color:red">Администратор</span>
+						<% } else if(elem.role === "supervisor") { %>
+							<span style="color:blue">Руководитель</span>
+						<% } else if(elem.role === "employee") { %>
+							<span style="color:grey">Сотрудник</span>
+						<% } else { %>
+							role
+						<% } %>
+						</td>
+						<td>
+							<% if(userId === elem.unique_id){ %>
+								<a style="color: grey">Удалить</a>
+
+							<% } else { %>
+								<a style="text-decoration: underline" onclick="remove('<%=elem._id%>')">Удалить</a>
+
+							<% } %>
+						</td>
+					</tr>
+				<% } ) %>
+			</table>
+		</center>
+	</div>
+	<div class="abc">
+		<a href="/profile">Назад</a>
+	</div>
+	<br><br>
+</div>
+</body>
+
+</html>
