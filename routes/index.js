@@ -388,7 +388,7 @@ function startScripts(){
 											countWord++;
 
 										if (countWord !== 0)
-											blockWeight = +block.blockWeight / (block.keyWords.split("\n").length - 1);
+											blockWeight = +countWord / (block.keyWords.split("\n").length - 1) * block.blockWeight;
 									}
 								});
 								_weightBlock = blockWeight;
